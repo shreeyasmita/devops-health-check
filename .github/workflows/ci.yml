@@ -1,0 +1,32 @@
+name: Advanced CI Pipeline
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 * * * *"   # run every hour
+
+jobs:
+  build-and-monitor:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t health-check .
+
+      - name: Run container
+        run: docker run --rm health-check
+
+      - name: Upload health.log artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: health-log
+          path: health.log
+
+      - name: Run unit tests
+        run: |
+          python -m unittest discover -s tests
