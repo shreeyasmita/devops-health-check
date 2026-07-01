@@ -17,7 +17,7 @@ jobs:
       - name: Build Docker image
         run: docker build -t health-check .
 
-      - name: Run container
+      - name: Run container with workspace mount
         run: docker run --rm -v ${{ github.workspace }}:/app health-check
 
       - name: Upload health.log artifact
