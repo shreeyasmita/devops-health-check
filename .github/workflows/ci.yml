@@ -18,7 +18,7 @@ jobs:
         run: docker build -t health-check .
 
       - name: Run container
-        run: docker run --rm health-check
+        run: docker run --rm -v ${{ github.workspace }}:/app health-check
 
       - name: Upload health.log artifact
         if: always()
