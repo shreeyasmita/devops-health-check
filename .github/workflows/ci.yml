@@ -39,3 +39,14 @@ jobs:
 
       - name: Run unit tests
         run: python -m unittest discover -s .github/workflows/tests -p "test_*.py"
+
+      - name: Send Slack alert for high CPU usage
+        if: always()
+        run: |
+          if [ -f "$GITHUB_WORKSPACE/health.log" ]; then
+            if grep -Eq 'CPU: ([8-9][0-9]|100)%' "$GITHUB_WORKSPACE/health.log"; then
+              curl -X POST -H 'Content-type: application/json' \
+                --data '{"text":"⚠️ High CPU usage detected in health-check pipeline!"}' \
+                "$SLACK_WEBHOOK_URL"
+            fi
+          fi
