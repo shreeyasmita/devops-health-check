@@ -25,7 +25,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: health-log
-          path: health.log
+          path: ${{ github.workspace }}/health.log
 
       - name: Run unit tests
         run: |
